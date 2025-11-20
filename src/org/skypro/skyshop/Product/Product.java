@@ -1,19 +1,13 @@
 package org.skypro.skyshop.Product;
 
-public class Product {
+public abstract class Product {
     private String title;
-    private int price;
 
-    public Product(String title, int price) {
+    public Product(String title) {
         if (title != "") {
             this.title = title;
         } else {
             throw new IllegalArgumentException("Нет названия продукта");
-        }
-        if (price > 0) {
-            this.price = price;
-        } else {
-            throw new IllegalArgumentException("Цена не может быть отрицательной");
         }
     }
 
@@ -21,12 +15,8 @@ public class Product {
         return title;
     }
 
-    public int getPrice() {
-        return price;
-    }
+    public abstract int getPrice();
 
-    public String toString() {
-        return title + " цена " + price;
-    }
+    public abstract boolean isSpecial();
 
 }

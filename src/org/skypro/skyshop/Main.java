@@ -1,6 +1,10 @@
 package org.skypro.skyshop;
 
+import org.skypro.skyshop.Product.DiscountedProduct.DiscountedProduct;
+import org.skypro.skyshop.Product.FixPriceProduct.FixPriceProduct;
 import org.skypro.skyshop.Product.Product;
+import org.skypro.skyshop.Product.SimpleProdukt.SimpleProduct;
+import org.skypro.skyshop.Product.SimpleProdukt.SimpleProduct;
 import org.skypro.skyshop.basket.ProductBasket;
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
@@ -9,17 +13,17 @@ public class Main {
     public static void main(String[] args) {
 
         // Создание списка продуктов
-        Product product1 = new Product("Война и мир", 100);
-        Product product2 = new Product("Алмазный меч", 150);
-        Product product3 = new Product("Ведьмак", 120);
-        Product product4 = new Product("Гиперион", 140);
-        Product product5 = new Product("Эверделл", 130);
-        Product product6 = new Product("Сумерки империи", 90);
+        Product product1 = new SimpleProduct("Война и мир", 100);
+        Product product2 = new DiscountedProduct("Алмазный меч", 200, 50);
+        Product product3 = new FixPriceProduct("Ведьмак");
+        Product product4 = new SimpleProduct("Гиперион", 140);
+        Product product5 = new DiscountedProduct("Эверделл", 130, 40);
+        Product product6 = new SimpleProduct("Сумерки империи", 90);
 
         // Инициализация и заполнение корзины с её переполнением
         ProductBasket basket = new ProductBasket();
         basket.addProduct(product1);
-        basket.addProduct(product1);
+        basket.addProduct(product2);
         basket.addProduct(product3);
         basket.addProduct(product4);
         basket.addProduct(product5);
