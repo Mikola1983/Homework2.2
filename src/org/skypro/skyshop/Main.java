@@ -65,7 +65,7 @@ public class Main {
         // Создание объектов класса Article
         Article article1 = new Article("Настольная игра", "Игра, в которую играют несколько человек");
         Article article2 = new Article("Книга", "Книги и аудиокниги разных жанров");
-        Article article3 = new Article("Электронная книга", "Книга - электронная vs бумажная. Какую выбрать?");
+        Article article3 = new Article("Электронная Книга", "Книга - электронная vs бумажная. Какую выбрать?");
         Article article4 = new Article("Телевизор", "Есть ли видимое преимущество в картинке у телевизоров 8К");
         Article article5 = new Article("Ноутбук", "Как выбрать игровой ноутбук");
 
@@ -95,6 +95,20 @@ public class Main {
         // Поиск с нулевым результатом (article5 не поместился в массив searching, так как был 11 элементом)
         System.out.println(search.search("Ноутбук"));
 
-    }
+        // Разделение домашних заданий в консоли для более удобного чтения
+        System.out.println("\n");
+        System.out.println("Домашняя работа исключения:\n");
 
+        // Проверка на некорректно введенные данные имени, цены, скидки
+        Product product7 = new SimpleProduct("", 100);
+        Product product8 = new DiscountedProduct("123", 0, 110);
+        System.out.println("");
+
+        // Поиск наилучшего результата
+        System.out.println(search.searchMax("Книга"));
+        System.out.println("");
+
+        // Поиск наилучшего результата - нулевой
+        System.out.println(search.searchMax("Автомобиль"));
+    }
 }

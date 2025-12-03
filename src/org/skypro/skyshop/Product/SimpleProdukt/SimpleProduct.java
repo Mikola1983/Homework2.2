@@ -8,6 +8,14 @@ public class SimpleProduct extends Product {
 
     public SimpleProduct(String title, int price) {
         super(title);
+        // Проверка корректности ввода цены продукта
+        try {
+            if (price <=0) {
+                throw new IllegalArgumentException();
+            }
+        } catch (IllegalArgumentException product) {
+            System.out.println(product + " Цена должна быть больше 0!");
+        }
         this.price = price;
     }
 
