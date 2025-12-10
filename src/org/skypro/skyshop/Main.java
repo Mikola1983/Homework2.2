@@ -1,6 +1,7 @@
 package org.skypro.skyshop;
 
 import org.skypro.skyshop.Articles.Article;
+import org.skypro.skyshop.Exceptions.BestResultNotFound;
 import org.skypro.skyshop.Product.DiscountedProduct.DiscountedProduct;
 import org.skypro.skyshop.Product.FixPriceProduct.FixPriceProduct;
 import org.skypro.skyshop.Product.Product;
@@ -99,16 +100,28 @@ public class Main {
         System.out.println("\n");
         System.out.println("Домашняя работа исключения:\n");
 
-        // Проверка на некорректно введенные данные имени, цены, скидки
-        Product product7 = new SimpleProduct("", 100);
-        Product product8 = new DiscountedProduct("123", 0, 110);
+        // Проверка на некорректно введенные данные имени, цены, скидки (нужно ввести некорректные параметры)
+        try {
+            Product product7 = new SimpleProduct("Планшет", 10);
+            Product product8 = new DiscountedProduct("Телефон", 10, 100);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
         System.out.println("");
 
         // Поиск наилучшего результата
-        System.out.println(search.searchMax("Книга"));
+        try {
+            System.out.println(search.searchMax("Книга"));
+        } catch (BestResultNotFound e) {
+            throw new RuntimeException(e);
+        }
         System.out.println("");
 
         // Поиск наилучшего результата - нулевой
-        System.out.println(search.searchMax("Автомобиль"));
-    }
+            try {
+                search.searchMax("Автомобиль");
+            } catch (BestResultNotFound e) {
+                throw new RuntimeException(e);
+            }
+}
 }

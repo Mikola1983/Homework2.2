@@ -7,14 +7,11 @@ public abstract class Product implements Searchable {
 
     public Product(String title) {
         // Проверка корректности ввода имени продукта
-        try {
-            if (title.isBlank()) {
-                throw new IllegalArgumentException();
-            }
-        } catch (IllegalArgumentException product) {
-            System.out.println(product + " Не указано название продукта");
+        if (title.isBlank()) {
+            throw new IllegalArgumentException("Не указано название продукта!");
+        } else {
+            this.title = title;
         }
-        this.title = title;
     }
 
     public String getTitle() {

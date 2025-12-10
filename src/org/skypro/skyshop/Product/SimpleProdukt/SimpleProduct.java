@@ -9,16 +9,12 @@ public class SimpleProduct extends Product {
     public SimpleProduct(String title, int price) {
         super(title);
         // Проверка корректности ввода цены продукта
-        try {
-            if (price <=0) {
-                throw new IllegalArgumentException();
-            }
-        } catch (IllegalArgumentException product) {
-            System.out.println(product + " Цена должна быть больше 0!");
+        if (price <= 0) {
+            throw new IllegalArgumentException(title + " Цена должна быть больше 0!");
+        } else {
+            this.price = price;
         }
-        this.price = price;
     }
-
 
     @Override
     public String getTitle() {
@@ -32,7 +28,8 @@ public class SimpleProduct extends Product {
     public String toString() {
         return getTitle() + ": " + price;
     }
-    public boolean isSpecial(){
+
+    public boolean isSpecial() {
         return false;
-    };
+    }
 }

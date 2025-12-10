@@ -9,23 +9,16 @@ public class DiscountedProduct extends Product {
     public DiscountedProduct(String title, int price, int discount) {
         super(title);
         // Проверка корректности ввода цены продукта
-        try {
-            if (price <= 0) {
-                throw new IllegalArgumentException();
-            }
-        } catch (IllegalArgumentException product) {
-            System.out.println(product + " Цена должна быть больше 0");
+        if (price <= 0) {
+            throw new IllegalArgumentException(title + " Цена должна быть больше 0");
+        } else {
+            this.price = price;
         }
-        // Проверка корректности ввода скидки
-        try {
-            if (discount < 0 || discount > 100) {
-                throw new IllegalArgumentException();
-            }
-        } catch (IllegalArgumentException product) {
-            System.out.println(product + " Скидка должна быть в диапазоне от 0 до 100%");
+        if (discount < 0 || discount > 100) {
+            throw new IllegalArgumentException(title + " Скидка должна быть в диапазоне от 0 до 100%");
+        } else {
+            this.discount = discount;
         }
-        this.price = price;
-        this.discount = discount;
     }
 
     @Override
@@ -44,5 +37,4 @@ public class DiscountedProduct extends Product {
     public boolean isSpecial() {
         return true;
     }
-
 }

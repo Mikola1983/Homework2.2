@@ -56,7 +56,7 @@ public class SearchEngine {
     }
 
     // Поиск наилучшего результата
-    public Searchable searchMax(String search) {
+    public Searchable searchMax(String search) throws BestResultNotFound {
         int count2 = 0;
         int index = 0;
         int index2 = 0;
@@ -81,14 +81,11 @@ public class SearchEngine {
                 count2 = count;
             }
         }
-        try {
-            if (result == null) {
-                throw new BestResultNotFound("");
-            }
-        } catch (BestResultNotFound e) {
-            System.out.println(e + "Для запроса " + search + " не нашлось лучшего результата");
+        if (result == null) {
+            throw new BestResultNotFound("Для запроса " + search + " не нашлось лучшего результата");
+        } else {
+            return result;
         }
-        return result;
     }
 }
 
