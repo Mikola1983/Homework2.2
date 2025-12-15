@@ -1,19 +1,16 @@
 package org.skypro.skyshop.Product;
 
-public class Product {
-    private String title;
-    private int price;
+import org.skypro.skyshop.Searching.Searchable;
 
-    public Product(String title, int price) {
-        if (title != "") {
+public abstract class Product implements Searchable {
+    private String title;
+
+    public Product(String title) {
+        // Проверка корректности ввода имени продукта
+        if (title.isBlank()) {
+            throw new IllegalArgumentException("Не указано название продукта!");
+        } else {
             this.title = title;
-        } else {
-            throw new IllegalArgumentException("Нет названия продукта");
-        }
-        if (price > 0) {
-            this.price = price;
-        } else {
-            throw new IllegalArgumentException("Цена не может быть отрицательной");
         }
     }
 
@@ -21,12 +18,18 @@ public class Product {
         return title;
     }
 
-    public int getPrice() {
-        return price;
+    public abstract int getPrice();
+
+    public abstract boolean isSpecial();
+
+    @Override
+    public String searchTerm() {
+        return this.title;
     }
 
-    public String toString() {
-        return title + " цена " + price;
+    @Override
+    public String contentType() {
+        return "PRODUCT";
     }
 
 }
