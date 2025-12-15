@@ -9,8 +9,6 @@ import org.skypro.skyshop.Product.SimpleProdukt.SimpleProduct;
 import org.skypro.skyshop.Searching.SearchEngine;
 import org.skypro.skyshop.basket.ProductBasket;
 
-import java.util.Arrays;
-
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
@@ -24,7 +22,7 @@ public class Main {
         Product product5 = new DiscountedProduct("Настольная игра 'Эверделл'", 130, 40);
         Product product6 = new SimpleProduct("Настольная игра 'Сумерки империи'", 90);
 
-        // Инициализация и заполнение корзины с её переполнением
+        // Инициализация и заполнение корзины
         ProductBasket basket = new ProductBasket();
         basket.addProduct(product1);
         basket.addProduct(product2);
@@ -42,16 +40,22 @@ public class Main {
         System.out.println("Общая стоимость продуктов в корзине: " + basket.priceBasket());
         System.out.println("");
 
-
         // Поиск товаров в корзине
         System.out.println(basket.searchBasket("Книга 'Ведьмак'"));
         System.out.println(basket.searchBasket("Настольная игра 'Сумерки империи'"));
+        System.out.println("");
+
+        // Удаление продукта "Настольная игра 'Эверделл'" и вывод списка удаленных продуктов
+        System.out.println(basket.deleteSearch("Настольная игра 'Эверделл'"));
 
         // Очистка корзины
         basket.deleteBasket();
 
         //Печать содержимого пустой корзины
         basket.printBasket();
+
+        // Удаление продукта несуществующего продукта "Настольная игра 'Эверделл'" и вывод списка удаленных продуктов
+        System.out.println(basket.deleteSearch("Настольная игра 'Эверделл'"));
 
         // Получение стоимости пустой корзины
         System.out.println("Общая стоимость продуктов в корзине: " + basket.priceBasket());
@@ -75,8 +79,8 @@ public class Main {
         System.out.println(product2.getStringRepresentation());
         System.out.println(article1.searchTerm() + " " + article1.contentType() + "\n");
 
-        //Инициализация и заполнение массива поиска с переполнением
-        SearchEngine search = new SearchEngine(10);
+        //Инициализация и заполнение списка поиска
+        SearchEngine search = new SearchEngine();
         search.add(product1);
         search.add(product2);
         search.add(product3);
@@ -89,12 +93,11 @@ public class Main {
         search.add(article4);
         search.add(article5);
 
-        // Поиск более 5 подходящих элементов - после 5 найденного остальные не проверяются
+        // Поиск более 5 подходящих элементов
         System.out.println(search.search("Книга") + "\n");
-        // Поиск менее 5 подходящих элементов
-        System.out.println(search.search("Настольная игра") + "\n");
-        // Поиск с нулевым результатом (article5 не поместился в массив searching, так как был 11 элементом)
-        System.out.println(search.search("Ноутбук"));
+
+        // Поиск с нулевым результатом
+        System.out.println(search.search("Автомобиль"));
 
         // Разделение домашних заданий в консоли для более удобного чтения
         System.out.println("\n");
@@ -118,10 +121,10 @@ public class Main {
         System.out.println("");
 
         // Поиск наилучшего результата - нулевой
-            try {
-                search.searchMax("Автомобиль");
-            } catch (BestResultNotFound e) {
-                throw new RuntimeException(e);
-            }
-}
+        try {
+            search.searchMax("Книга");
+        } catch (BestResultNotFound e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

@@ -1,58 +1,33 @@
 package org.skypro.skyshop.Searching;
 
 import org.skypro.skyshop.Exceptions.BestResultNotFound;
+import org.skypro.skyshop.Product.Product;
 
-import java.util.Arrays;
+import java.util.LinkedList;
 
 public class SearchEngine {
-    int size;
-    private Searchable searching[];
-    private Searchable searchResult[];
+    private LinkedList<Searchable> searching = new LinkedList<>();
+    private LinkedList<Searchable> searchResult = new LinkedList<>();
 
-    public SearchEngine(int size) {
-        this.size = size;
-        this.searching = new Searchable[size];
-        this.searchResult = new Searchable[5];
-    }
-
-    // Добавление объектов в массив поиска
+    // Добавление объектов в список поиска
     public void add(Searchable search) {
-        int count = 0;
-        for (int i = 0; i < searching.length; i++) {
-            if (searching[i] == null) {
-                searching[i] = search;
-                break;
-            } else {
-                count++;
-            }
-            if (count == searching.length) {
-                break;
-            }
-        }
+        searching.add(search);
     }
 
     // Поиск объектов по заданной строке
     public String search(String result) {
         int count2 = 0;
-        // Цикл для сброса результатов предыдущего поиска
-        for (int i = 0; i < 5; i++) {
-            searchResult[i] = null;
-        }
-        // Переборка массива и заполнения массива результата поиска
-        for (int i = 0; i < searching.length; i++) {
-            if (searching[i] == null) {
-                continue;
-            }
-            if (searching[i].searchTerm().contains(result)) {
-                searchResult[count2] = searching[i];
+        // Сброс результатов предыдущего поиска
+        searchResult.clear();
+        // Переборка списка и заполнения списка результата поиска
+        for (int i = 0; i < searching.size(); i++) {
+            if (searching.get(i).searchTerm().contains(result)) {
+                searchResult.add(searching.get(i));
                 count2++;
-            }
-            if (count2 == 5) {
-                break;
             }
         }
         System.out.println("Найдено " + count2 + " совпадений");
-        return Arrays.toString(searchResult);
+        return searchResult.toString();
     }
 
     // Поиск наилучшего результата
@@ -64,12 +39,9 @@ public class SearchEngine {
         Searchable result;
         result = null;
         // Переборка массива и поиск наилучшего совпадения
-        for (int i = 0; i < searching.length; i++) {
+        for (int i = 0; i < searching.size(); i++) {
             int count = 0;
-            if (searching[i] == null) {
-                continue;
-            }
-            object = searching[i].searchTerm();
+            object = searching.get(i).searchTerm();
             index = object.indexOf(search, index2);
             while (index != -1) {
                 count++;
@@ -77,7 +49,7 @@ public class SearchEngine {
                 index = object.indexOf(search, index2);
             }
             if (count > count2) {
-                result = searching[i];
+                result = searching.get(i);
                 count2 = count;
             }
         }
