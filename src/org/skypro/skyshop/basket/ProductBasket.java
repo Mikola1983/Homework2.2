@@ -2,31 +2,28 @@ package org.skypro.skyshop.basket;
 
 import org.skypro.skyshop.Product.Product;
 
+import java.awt.*;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+
 public class ProductBasket {
-    private Product products[] = new Product[5];
+    private HashMap<String, LinkedList<Product>> products = new HashMap<>();
 
     // Добавление продукта в корзину
     public void addProduct(Product product) {
-        int count = 0;
-        for (int i = 0; i < products.length; i++) {
-            if (products[i] == null) {
-                this.products[i] = product;
-                break;
-            } else {
-                count++;
-            }
-            if (count == products.length) {
-                System.out.println("Невозможно добавить продукт");
-            }
-        }
+        products.computeIfAbsent(product.getTitle(), key -> new LinkedList<>());
+        products.get(product.getTitle()).add(product);
     }
 
     // Вычисление стоимости корзины
     public int priceBasket() {
         int basketPrice = 0;
-        for (int i = 0; i < products.length; i++) {
-            if (products[i] != null) {
-                basketPrice = basketPrice + this.products[i].getPrice();
+        // Перебираем все списки продуктов в корзине
+        for (LinkedList<Product> productList : products.values()) {
+            // Перебираем каждый продукт в текущем списке
+            for (Product product : productList) {
+                basketPrice += product.getPrice();
             }
         }
         return basketPrice;
@@ -35,39 +32,55 @@ public class ProductBasket {
     // Вывод корзины в консоль
     public void printBasket() {
         int basketPrice = 0;
-        for (int i = 0; i < products.length; i++) {
-            if (products[i] != null) {
-                basketPrice = basketPrice + this.products[i].getPrice();
-                System.out.println(products[i].getTitle() + ": " + products[i].getPrice());
+        int special = 0;
+        int i =0;
+        // Перебираем все списки продуктов в корзине
+        for (LinkedList<Product> productList : products.values()) {
+            //System.out.println("Категория " + products.keySet());
+            // Перебираем каждый продукт в текущем списке
+            for (Product product : productList) {
+                basketPrice += product.getPrice();
+                i++;
+                //System.out.println(products.keySet());
+                if (product.isSpecial()) {
+                    special++;
+                }
             }
         }
+        System.out.println(products.keySet());
+        System.out.println("Всего товаров " + i);
         if (basketPrice > 0) {
             System.out.println("Итого: " + basketPrice);
-        } else System.out.println("В корзине пусто");
+            System.out.println("Специальных товаров: " + special);
+        } else {
+            System.out.println("В корзине пусто");
+        }
     }
 
     // Проверка продукта в корзине по имени
     public boolean searchBasket(String nameProduct) {
-        boolean contrast = false;
-        Product product;
-        for (int i = 0; i < products.length; i++) {
-            if (products[i] == null) {
-                contrast = false;
-                break;
-            }
-            if (products[i].getTitle() == nameProduct) {
-                contrast = true;
-                break;
+        for (LinkedList<Product> productList : products.values()) {
+            for (Product product : productList) {
+                if (nameProduct.equals(product.getTitle())) {
+                    return true;
+                }
             }
         }
-        return contrast;
+        return false;
     }
 
     // Очистка корзины
     public void deleteBasket() {
-        for (int i = 0; i < products.length; i++) {
-            products[i] = null;
+        products.clear();
+    }
+
+    // Удаление продукта по заданному имени
+    public List<Product> deleteSearch(String name) {
+        List<Product> removedProducts = products.remove(name);
+        if (removedProducts == null) {
+            return new LinkedList<>(); // Категория не найдена
         }
+        return removedProducts;
     }
 
 }
