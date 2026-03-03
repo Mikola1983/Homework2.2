@@ -3,25 +3,28 @@ package org.skypro.skyshop.basket;
 import org.skypro.skyshop.Product.Product;
 
 import java.awt.*;
-import java.util.Iterator;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
 public class ProductBasket {
-    private LinkedList<Product> products = new LinkedList<>();
+    private HashMap<String, LinkedList<Product>> products = new HashMap<>();
 
     // Добавление продукта в корзину
     public void addProduct(Product product) {
-        products.add(product);
+        products.computeIfAbsent(product.getTitle(), key -> new LinkedList<>());
+        products.get(product.getTitle()).add(product);
     }
 
     // Вычисление стоимости корзины
     public int priceBasket() {
         int basketPrice = 0;
-        Iterator<Product> iterator = products.iterator();
-        while (iterator.hasNext()) {
-            Product products = iterator.next();
-            basketPrice = basketPrice + products.getPrice();
+        // Перебираем все списки продуктов в корзине
+        for (LinkedList<Product> productList : products.values()) {
+            // Перебираем каждый продукт в текущем списке
+            for (Product product : productList) {
+                basketPrice += product.getPrice();
+            }
         }
         return basketPrice;
     }
@@ -30,33 +33,40 @@ public class ProductBasket {
     public void printBasket() {
         int basketPrice = 0;
         int special = 0;
-        Iterator<Product> iterator = products.iterator();
-        while (iterator.hasNext()) {
-            Product products = iterator.next();
-            basketPrice = basketPrice + products.getPrice();
-            System.out.println(products.toString());
-            if (products.isSpecial()) {
-                special++;
+        int i =0;
+        // Перебираем все списки продуктов в корзине
+        for (LinkedList<Product> productList : products.values()) {
+            //System.out.println("Категория " + products.keySet());
+            // Перебираем каждый продукт в текущем списке
+            for (Product product : productList) {
+                basketPrice += product.getPrice();
+                i++;
+                //System.out.println(products.keySet());
+                if (product.isSpecial()) {
+                    special++;
+                }
             }
         }
+        System.out.println(products.keySet());
+        System.out.println("Всего товаров " + i);
         if (basketPrice > 0) {
             System.out.println("Итого: " + basketPrice);
             System.out.println("Специальных товаров: " + special);
-        } else System.out.println("В корзине пусто");
+        } else {
+            System.out.println("В корзине пусто");
+        }
     }
 
     // Проверка продукта в корзине по имени
     public boolean searchBasket(String nameProduct) {
-        boolean contrast = false;
-        Iterator<Product> iterator = products.iterator();
-        while (iterator.hasNext()) {
-            Product products = iterator.next();
-            if (nameProduct.equals(products.getTitle())) {
-                contrast = true;
-                break;
+        for (LinkedList<Product> productList : products.values()) {
+            for (Product product : productList) {
+                if (nameProduct.equals(product.getTitle())) {
+                    return true;
+                }
             }
         }
-        return contrast;
+        return false;
     }
 
     // Очистка корзины
@@ -66,19 +76,11 @@ public class ProductBasket {
 
     // Удаление продукта по заданному имени
     public List<Product> deleteSearch(String name) {
-        LinkedList<Product> deletedProduct = new LinkedList<>();
-        Iterator<Product> iterator = products.iterator();
-        while (iterator.hasNext()) {
-            Product products = iterator.next();
-            if (name.equals(products.getTitle())) {
-                deletedProduct.add(products);
-                iterator.remove();
-            }
+        List<Product> removedProducts = products.remove(name);
+        if (removedProducts == null) {
+            return new LinkedList<>(); // Категория не найдена
         }
-        if (deletedProduct.isEmpty()) {
-            System.out.println("Список пуст");
-        }
-        return (deletedProduct);
+        return removedProducts;
     }
 
 }
