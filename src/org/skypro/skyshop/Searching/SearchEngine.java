@@ -3,40 +3,32 @@ package org.skypro.skyshop.Searching;
 import org.skypro.skyshop.Exceptions.BestResultNotFound;
 import org.skypro.skyshop.Product.Product;
 
-import java.util.Map;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.TreeMap;
+import java.util.*;
 
 public class SearchEngine {
-    private TreeMap<String, LinkedList<Product>> searching = new TreeMap<>();
-    private HashMap<String, LinkedList<Product>> searchResult = new HashMap<>();
+    private Set<HashSet<Searchable>> searching = new HashSet<>();
 
     // Добавление объектов в список поиска
-    public void add(String key, LinkedList<Product> search) {
-        searching.put(key, search);
+    public void add(String key, HashSet<Searchable> search) {
+        if (search != null) {
+            searching.add(search);
+        }
     }
 
     // Поиск объектов по заданной строке
-    public Map<String, LinkedList<Product>> search(String result) {
+    public Set<Searchable> search(String result) {
         int count2 = 0;
+        Set<Searchable> searchResult = new TreeSet<>(new SearchableComparator());
         // Сброс результатов предыдущего поиска
         searchResult.clear();
         // Переборка списка и заполнения списка результата поиска
-        for (Map.Entry<String, LinkedList<Product>> entry : searching.entrySet()) {
-            String category = entry.getKey();
-            LinkedList<Product> productList = entry.getValue();
-            LinkedList<Product> foundInCategory = new LinkedList<>();
+        for (HashSet<Searchable> productHashSet : searching) {
             // Перебираем продукты в текущем списке
-            for (Product product : productList) {
+            for (Searchable product : productHashSet) {
                 if (product.searchTerm().contains(result)) {
-                    foundInCategory.add(product);
+                    searchResult.add(product);
                     count2++;
                 }
-            }
-            // Если в категории найдены продукты, добавляем их в результат
-            if (!foundInCategory.isEmpty()) {
-                searchResult.put(category, foundInCategory);
             }
         }
         System.out.println("Найдено " + count2 + " совпадений");
@@ -46,14 +38,12 @@ public class SearchEngine {
     // Поиск наилучшего результата
     public Searchable searchMax(String search) throws BestResultNotFound {
         int count2 = 0;
-        String object;
-        Searchable result;
-        result = null;
+        //String object;
+        Searchable result = null;
         // Перебираем все категории и списки продуктов
-        for (Map.Entry<String, LinkedList<Product>> entry : searching.entrySet()) {
-            LinkedList<Product> productList = entry.getValue();
+        for (HashSet<Searchable> productHashSet : searching) {
             // Перебираем продукты в текущем списке
-            for (Product product : productList) {
+            for (Searchable product : productHashSet) {
                 if (product == null || product.searchTerm() == null) {
                     continue;
                 }

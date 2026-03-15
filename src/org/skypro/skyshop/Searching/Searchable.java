@@ -8,5 +8,6 @@ public interface Searchable {
     default String getStringRepresentation() {
         return "Имя: " + searchTerm() + "\nТип: " + contentType();
     }
+    String getTitle();
 
 }

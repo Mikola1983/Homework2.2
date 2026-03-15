@@ -7,14 +7,12 @@ import org.skypro.skyshop.Product.FixPriceProduct.FixPriceProduct;
 import org.skypro.skyshop.Product.Product;
 import org.skypro.skyshop.Product.SimpleProdukt.SimpleProduct;
 import org.skypro.skyshop.Searching.SearchEngine;
+import org.skypro.skyshop.Searching.Searchable;
 import org.skypro.skyshop.basket.ProductBasket;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
     public static void main(String[] args) {
 
@@ -25,7 +23,7 @@ public class Main {
         Product product4 = new SimpleProduct("Книга 'Гиперион'", 140);
         Product product5 = new DiscountedProduct("Настольная игра 'Эверделл'", 130, 40);
         Product product6 = new SimpleProduct("Настольная игра 'Сумерки империи'", 90);
-
+        Product product7 = new FixPriceProduct("Книга 'Ведьмак '");
         // Создание объектов класса Article
         Article article1 = new Article("Настольная игра", "Игра, в которую играют несколько человек");
         Article article2 = new Article("Книга", "Книги и аудиокниги разных жанров");
@@ -85,31 +83,51 @@ public class Main {
 
         // Разделение домашних заданий в консоли для более удобного чтения
         System.out.println("\n");
-        System.out.println("Домашняя работа Java Collection Framework: Map:\n");
+        System.out.println("Домашняя работа Java Collection Framework: Set:\n");
 
         //Инициализация и заполнение списка поиска
         SearchEngine search = new SearchEngine();
-        LinkedList<Product> books = new LinkedList<>();
+        HashSet<Searchable> books = new HashSet<>();
         books.add(product1);
         books.add(product2);
         books.add(product3);
         books.add(product4);
         books.add(product4);
         books.add(product4);
-        LinkedList<Product> boardGames = new LinkedList<>();
-        books.add(product5);
-        books.add(product6);
+        books.add(product7);
+        HashSet<Searchable> boardGames = new HashSet<>();
+        boardGames.add(product5);
+        boardGames.add(product6);
+        boardGames.add(product5);
+        boardGames.add(product6);
+        HashSet<Searchable> articles = new HashSet<>();
+        articles.add(article1);
+        articles.add(article2);
+        articles.add(article3);
+        articles.add(article3);
+        articles.add(article4);
+        articles.add(article5);
+
         search.add("Книга", books);
         search.add("Настольная игра", boardGames);
+        search.add("Книга", articles);
 
         //Проверка методов поиска
-        System.out.println(search.search("Гиперион").values());
-        System.out.println(search.search("Эверделл").values());
-        try {
-            System.out.println(search.searchMax("Ведьмак"));
-        } catch (BestResultNotFound e) {
-            throw new RuntimeException(e);
+        Set<Searchable> results1 = search.search("Гиперион");
+        System.out.println("Результаты поиска 'Гиперион':");
+        for (Searchable result : results1) {
+            System.out.println("- " + result.getTitle() + " (" + result.contentType() + ")");
         }
 
+        Set<Searchable> results2 = search.search("Эверделл");
+        System.out.println("\nРезультаты поиска 'Эверделл':");
+        for (Searchable result : results2) {
+            System.out.println("- " + result.getTitle() + " (" + result.contentType() + ")");
+        }
+        Set<Searchable> results3 = search.search("Книга");
+        System.out.println("\nРезультаты поиска 'Книга':");
+        for (Searchable result : results3) {
+            System.out.println("- " + result.getTitle() + " (" + result.contentType() + ")");
+        }
     }
 }

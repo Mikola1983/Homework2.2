@@ -33,10 +33,9 @@ public class ProductBasket {
     public void printBasket() {
         int basketPrice = 0;
         int special = 0;
-        int i =0;
+        int i = 0;
         // Перебираем все списки продуктов в корзине
         for (LinkedList<Product> productList : products.values()) {
-            //System.out.println("Категория " + products.keySet());
             // Перебираем каждый продукт в текущем списке
             for (Product product : productList) {
                 basketPrice += product.getPrice();
