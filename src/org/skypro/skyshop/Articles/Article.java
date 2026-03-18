@@ -5,7 +5,7 @@ import org.skypro.skyshop.Searching.SearchableComparator;
 
 import java.util.Objects;
 
-public final class Article extends SearchableComparator implements Searchable {
+public final class Article implements Searchable {
     public final String titleProduct;
     public final String descriptionProduct;
 

@@ -31,49 +31,6 @@ public class Main {
         Article article4 = new Article("Телевизор", "Есть ли видимое преимущество в картинке у телевизоров 8К");
         Article article5 = new Article("Ноутбук", "Как выбрать игровой ноутбук");
 
-        // Инициализация и заполнение корзины
-        ProductBasket basket = new ProductBasket();
-        basket.addProduct(product1);
-        basket.addProduct(product2);
-        basket.addProduct(product3);
-        basket.addProduct(product4);
-        basket.addProduct(product5);
-        basket.addProduct(product5);
-        System.out.println("");
-
-        // Печать содержимого корзины
-        basket.printBasket();
-        System.out.println("");
-
-        // Получение стоимости корзины
-        System.out.println("Общая стоимость продуктов в корзине: " + basket.priceBasket());
-        System.out.println("");
-
-        // Поиск товаров в корзине
-        System.out.println(basket.searchBasket("Книга 'Ведьмак'"));
-        System.out.println(basket.searchBasket("Настольная игра 'Сумерки империи'"));
-        System.out.println("");
-
-        // Удаление продукта "Настольная игра 'Эверделл'" и вывод списка удаленных продуктов
-        System.out.println(basket.deleteSearch("Настольная игра 'Эверделл'"));
-
-        // Очистка корзины
-        basket.deleteBasket();
-
-        //Печать содержимого пустой корзины
-        basket.printBasket();
-
-        // Удаление продукта несуществующего продукта "Настольная игра 'Эверделл'" и вывод списка удаленных продуктов
-        System.out.println(basket.deleteSearch("Настольная игра 'Эверделл'"));
-
-        // Получение стоимости пустой корзины
-        System.out.println("Общая стоимость продуктов в корзине: " + basket.priceBasket());
-
-        // Поиск товара в пустой корзине
-        System.out.println(basket.searchBasket("Книга 'Ведьмак'"));
-
-        // Разделение домашних заданий в консоли для более удобного чтения
-        System.out.println("\n");
         System.out.println("Домашняя работа полиморфизм, интерфейсы:\n");
 
         //Проверка методов класса Article и переопределенных методов интерфейса Searchable
@@ -81,8 +38,6 @@ public class Main {
         System.out.println(product2.getStringRepresentation());
         System.out.println(article1.searchTerm() + " " + article1.contentType() + "\n");
 
-        // Разделение домашних заданий в консоли для более удобного чтения
-        System.out.println("\n");
         System.out.println("Домашняя работа Java Collection Framework: Set:\n");
 
         //Инициализация и заполнение списка поиска
@@ -129,5 +84,45 @@ public class Main {
         for (Searchable result : results3) {
             System.out.println("- " + result.getTitle() + " (" + result.contentType() + ")");
         }
+
+        System.out.println("\n");
+        System.out.println("Домашняя работа Stream API и лямбда-выражения:\n");
+
+        // Инициализация и заполнение корзины
+        ProductBasket basket = new ProductBasket();
+        basket.addProduct(product1);
+        basket.addProduct(product2);
+        basket.addProduct(product3);
+        basket.addProduct(product4);
+        basket.addProduct(product5);
+        basket.addProduct(product5);
+
+        // Печать содержимого корзины
+        basket.printBasket();
+
+        // Получение стоимости корзины
+        System.out.println("\nОбщая стоимость продуктов в корзине: " + basket.priceBasket());
+
+        // Поиск товаров в корзине
+        System.out.println("\n" + basket.searchBasket("Книга 'Ведьмак'"));
+        System.out.println(basket.searchBasket("Настольная игра 'Сумерки империи'"));
+
+        // Удаление продукта "Настольная игра 'Эверделл'" и вывод списка удаленных продуктов
+        System.out.println("\n" + basket.deleteSearch("Настольная игра 'Эверделл'"));
+
+        // Очистка корзины
+        basket.deleteBasket();
+
+        //Печать содержимого пустой корзины
+        basket.printBasket();
+
+        // Удаление продукта несуществующего продукта "Настольная игра 'Эверделл'" и вывод списка удаленных продуктов
+        System.out.println(basket.deleteSearch("Настольная игра 'Эверделл'"));
+
+        // Получение стоимости пустой корзины
+        System.out.println("Общая стоимость продуктов в корзине: " + basket.priceBasket());
+
+        // Поиск товара в пустой корзине
+        System.out.println(basket.searchBasket("Книга 'Ведьмак'"));
     }
 }

@@ -18,54 +18,50 @@ public class ProductBasket {
 
     // Вычисление стоимости корзины
     public int priceBasket() {
-        int basketPrice = 0;
-        // Перебираем все списки продуктов в корзине
-        for (LinkedList<Product> productList : products.values()) {
-            // Перебираем каждый продукт в текущем списке
-            for (Product product : productList) {
-                basketPrice += product.getPrice();
-            }
-        }
-        return basketPrice;
+        return products.values().stream()
+                // Преобразуем поток списков в поток продуктов
+                .flatMap(java.util.Collection::stream)
+                // Получаем поток цен (int)
+                .mapToInt(Product::getPrice)
+                // Суммируем цены
+                .sum();
+    }
+
+    // Вспомогательный метод для подсчёта специальных товаров
+    private long getSpecialCount() {
+        // Фильтруем специальные продукты и считаем их количество
+        return products.values().stream()
+                .flatMap(java.util.Collection::stream)
+                .filter(Product::isSpecial)
+                .count();
     }
 
     // Вывод корзины в консоль
     public void printBasket() {
-        int basketPrice = 0;
-        int special = 0;
-        int i = 0;
-        // Перебираем все списки продуктов в корзине
-        for (LinkedList<Product> productList : products.values()) {
-            // Перебираем каждый продукт в текущем списке
-            for (Product product : productList) {
-                basketPrice += product.getPrice();
-                i++;
-                //System.out.println(products.keySet());
-                if (product.isSpecial()) {
-                    special++;
-                }
-            }
-        }
-        System.out.println(products.keySet());
-        System.out.println("Всего товаров " + i);
-        if (basketPrice > 0) {
-            System.out.println("Итого: " + basketPrice);
-            System.out.println("Специальных товаров: " + special);
-        } else {
+        long totalCount = products.values().stream()
+                .flatMap(java.util.Collection::stream)
+                // Общее количество товаров
+                .count();
+        int basketPrice = priceBasket();
+        long specialCount = getSpecialCount();
+        if (totalCount == 0) {
             System.out.println("В корзине пусто");
+            return;
         }
+        System.out.println("Всего товаров " + totalCount);
+        System.out.println("Общая стоимость: " + basketPrice);
+        System.out.println("Специальных товаров: " + specialCount);
+        // Выводим информацию о каждом продукте
+        products.values().stream()
+                .flatMap(java.util.Collection::stream)
+                .forEach(product -> System.out.println("Товар: " + product.getTitle() + ", Цена: " + product.getPrice() + (product.isSpecial() ? " (специальный)" : "")));
     }
 
     // Проверка продукта в корзине по имени
     public boolean searchBasket(String nameProduct) {
-        for (LinkedList<Product> productList : products.values()) {
-            for (Product product : productList) {
-                if (nameProduct.equals(product.getTitle())) {
-                    return true;
-                }
-            }
-        }
-        return false;
+        return products.values().stream()
+                .flatMap(java.util.Collection::stream)
+                .anyMatch(product -> nameProduct.equals(product.getTitle()));
     }
 
     // Очистка корзины
@@ -81,5 +77,4 @@ public class ProductBasket {
         }
         return removedProducts;
     }
-
 }
