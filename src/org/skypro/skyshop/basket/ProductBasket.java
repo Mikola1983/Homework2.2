@@ -2,72 +2,79 @@ package org.skypro.skyshop.basket;
 
 import org.skypro.skyshop.Product.Product;
 
+import java.awt.*;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+
 public class ProductBasket {
-    private Product products[] = new Product[5];
+    private HashMap<String, LinkedList<Product>> products = new HashMap<>();
 
     // Добавление продукта в корзину
     public void addProduct(Product product) {
-        int count = 0;
-        for (int i = 0; i < products.length; i++) {
-            if (products[i] == null) {
-                this.products[i] = product;
-                break;
-            } else {
-                count++;
-            }
-            if (count == products.length) {
-                System.out.println("Невозможно добавить продукт");
-            }
-        }
+        products.computeIfAbsent(product.getTitle(), key -> new LinkedList<>());
+        products.get(product.getTitle()).add(product);
     }
 
     // Вычисление стоимости корзины
     public int priceBasket() {
-        int basketPrice = 0;
-        for (int i = 0; i < products.length; i++) {
-            if (products[i] != null) {
-                basketPrice = basketPrice + this.products[i].getPrice();
-            }
-        }
-        return basketPrice;
+        return products.values().stream()
+                // Преобразуем поток списков в поток продуктов
+                .flatMap(java.util.Collection::stream)
+                // Получаем поток цен (int)
+                .mapToInt(Product::getPrice)
+                // Суммируем цены
+                .sum();
+    }
+
+    // Вспомогательный метод для подсчёта специальных товаров
+    private long getSpecialCount() {
+        // Фильтруем специальные продукты и считаем их количество
+        return products.values().stream()
+                .flatMap(java.util.Collection::stream)
+                .filter(Product::isSpecial)
+                .count();
     }
 
     // Вывод корзины в консоль
     public void printBasket() {
-        int basketPrice = 0;
-        for (int i = 0; i < products.length; i++) {
-            if (products[i] != null) {
-                basketPrice = basketPrice + this.products[i].getPrice();
-                System.out.println(products[i].getTitle() + ": " + products[i].getPrice());
-            }
+        long totalCount = products.values().stream()
+                .flatMap(java.util.Collection::stream)
+                // Общее количество товаров
+                .count();
+        int basketPrice = priceBasket();
+        long specialCount = getSpecialCount();
+        if (totalCount == 0) {
+            System.out.println("В корзине пусто");
+            return;
         }
-        if (basketPrice > 0) {
-            System.out.println("Итого: " + basketPrice);
-        } else System.out.println("В корзине пусто");
+        System.out.println("Всего товаров " + totalCount);
+        System.out.println("Общая стоимость: " + basketPrice);
+        System.out.println("Специальных товаров: " + specialCount);
+        // Выводим информацию о каждом продукте
+        products.values().stream()
+                .flatMap(java.util.Collection::stream)
+                .forEach(product -> System.out.println("Товар: " + product.getTitle() + ", Цена: " + product.getPrice() + (product.isSpecial() ? " (специальный)" : "")));
     }
 
     // Проверка продукта в корзине по имени
     public boolean searchBasket(String nameProduct) {
-        boolean contrast = false;
-        Product product;
-        for (int i = 0; i < products.length; i++) {
-            if (products[i] == null) {
-                contrast = false;
-                break;
-            }
-            if (products[i].getTitle() == nameProduct) {
-                contrast = true;
-                break;
-            }
-        }
-        return contrast;
+        return products.values().stream()
+                .flatMap(java.util.Collection::stream)
+                .anyMatch(product -> nameProduct.equals(product.getTitle()));
     }
 
     // Очистка корзины
     public void deleteBasket() {
-        for (int i = 0; i < products.length; i++) {
-            products[i] = null;
-        }
+        products.clear();
     }
 
+    // Удаление продукта по заданному имени
+    public List<Product> deleteSearch(String name) {
+        List<Product> removedProducts = products.remove(name);
+        if (removedProducts == null) {
+            return new LinkedList<>(); // Категория не найдена
+        }
+        return removedProducts;
+    }
 }
